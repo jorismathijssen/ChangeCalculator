@@ -1,0 +1,66 @@
+# Gradle-specific files
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse files
+.metadata/
+*.classpath
+*.project
+*.settings/
+
+# VS Code files
+.vscode/
+
+# Logs
+logs/
+*.log
+debug.log
+error.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Java-related files
+*.class
+*.jar
+*.war
+*.ear
+*.javadoc
+
+# Spring Boot specific
+target/
+bin/
+hs_err_pid*
+
+# Environment variables & configuration
+.env
+*.properties
+*.yml
+*.yaml
+!src/main/resources/application.yml
+!src/main/resources/application.yaml
+!src/main/resources/application.properties
+
+# Test reports
+test-output/
+surefire-reports/
+
+# Kubernetes files (if used)
+k8s/
+helm/
+
+# Temporary files
+*.tmp
+*.bak
+*.~*
