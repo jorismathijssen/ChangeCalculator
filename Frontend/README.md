@@ -10,20 +10,13 @@ Zorg ervoor dat je de volgende software hebt geïnstalleerd voordat je de applic
 
 ## 🚀 Installatie en Opstarten
 
-### 1️⃣ Clone de repository
-
-```sh
-git clone <repository-url>
-cd frontend
-```
-
-### 2️⃣ Installeer dependencies
+### 1️⃣ Installeer dependencies
 
 ```sh
 npm install
 ```
 
-### 3️⃣ Maak een `.env` bestand aan
+### 2️⃣ Maak een `.env` bestand aan
 
 Indien je de standaard backend URL (`http://localhost:8080`) gebruikt, kun je het voorbeeldbestand `.env.example` kopiëren:
 
@@ -33,7 +26,7 @@ cp .env.example .env
 
 Indien nodig, pas de API URL aan in het `.env` bestand.
 
-### 4️⃣ Start de ontwikkelserver
+### 3️⃣ Start de ontwikkelserver
 
 ```sh
 npm run dev
@@ -41,7 +34,7 @@ npm run dev
 
 Dit start de applicatie en opent een browservenster op `http://localhost:5173`
 ## ⚙️ Configuratie
-De frontend communiceert met een backend API. Voor meer informatie zie de [backend instructies](../backend/README.md)
+De frontend communiceert met een backend API. Voor meer informatie zie de [backend instructies](./../Backend/README.md)
 
 ## 🛠️ Builden voor productie
 
