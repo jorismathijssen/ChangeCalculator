@@ -11,5 +11,5 @@ Dit project bestaat uit twee hoofdcomponenten:
 ## 📂 Repositories en Documentatie
 Voor installatie instructies en details over de implementatie, raadpleeg de afzonderlijke README-bestanden:
 
-- 🔹 [Frontend README](./frontend/README.md)
-- 🔹 [Backend README](./backend/README.md)
+- 🔹 [Frontend README](./Frontend/README.md)
+- 🔹 [Backend README](./Backend/README.md)

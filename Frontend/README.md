@@ -34,7 +34,7 @@ npm run dev
 
 Dit start de applicatie en opent een browservenster op `http://localhost:5173`
 ## ⚙️ Configuratie
-De frontend communiceert met een backend API. Voor meer informatie zie de [backend instructies](./../Backend/README.md)
+De frontend communiceert met een backend API. Voor meer informatie zie de [backend instructies](../Backend/README.md)
 
 ## 🛠️ Builden voor productie
 
