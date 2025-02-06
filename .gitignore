@@ -59,6 +59,8 @@ surefire-reports/
 # Kubernetes files (if used)
 k8s/
 helm/
+!backend-deployment.yaml
+!frontend-deployment.yaml
 
 # Temporary files
 *.tmp
