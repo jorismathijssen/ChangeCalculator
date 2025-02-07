@@ -61,6 +61,8 @@ k8s/
 helm/
 !backend-deployment.yaml
 !frontend-deployment.yaml
+!ingress.yaml
+
 
 # Temporary files
 *.tmp

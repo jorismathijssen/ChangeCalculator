@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: frontend-app:latest  # Update with your Docker image name
+          image: frontend-app:latest
           ports:
             - containerPort: 80
 ---
@@ -29,4 +29,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: NodePort  # Exposes the service to be accessible from outside the cluster
+  type: NodePort
