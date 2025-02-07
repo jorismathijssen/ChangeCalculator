@@ -1,34 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: change-calculator-frontend
-  labels:
-    app: change-calculator-frontend
+  name: frontend-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: change-calculator-frontend
+      app: frontend-app
   template:
     metadata:
       labels:
-        app: change-calculator-frontend
+        app: frontend-app
     spec:
       containers:
-        - name: frontend
-          image: ghcr.io/jorismathijssen/change-calculator-frontend:latest
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-service
-spec:
-  selector:
-    app: change-calculator-frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+      - name: frontend-app
+        image: localhost:5000/frontend-app:latest
+        ports:
+        - containerPort: 80
