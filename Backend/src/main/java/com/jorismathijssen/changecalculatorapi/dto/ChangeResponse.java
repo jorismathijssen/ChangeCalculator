@@ -9,8 +9,9 @@ import java.util.Map;
  *
  * @param changeAmount    The total amount of change to be returned to the customer.
  * @param changeBreakdown A map detailing the breakdown of the change into denominations,
- *                        where the key is the denomination (e.g., "€10") and the value is
- *                        the count of that denomination.
+ *                        where the key is the denomination (formatted with the correct currency symbol),
+ *                        and the value is the count of that denomination.
+ * @param currency        The currency code in which the change is calculated.
  */
 public record ChangeResponse(
         @Schema(
@@ -25,5 +26,12 @@ public record ChangeResponse(
                 description = "A breakdown of the change into denominations.",
                 example = "{\"€10\": 1, \"€2\": 1, \"€0.20\": 1, \"€0.10\": 1, \"€0.05\": 1}"
         )
-        Map<String, Integer> changeBreakdown
+        Map<String, Integer> changeBreakdown,
+
+        @Schema(
+                description = "The currency in which the change is given.",
+                type = "string",
+                example = "EUR"
+        )
+        String currency
 ) {}

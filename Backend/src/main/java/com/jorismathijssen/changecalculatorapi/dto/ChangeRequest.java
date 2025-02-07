@@ -2,14 +2,15 @@ package com.jorismathijssen.changecalculatorapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
  * Data Transfer Object representing a request to calculate change.
  * <p>
- * This DTO contains the total amount due and the cash provided by the customer.
- * Both fields are mandatory and must be non-negative values.
+ * This DTO contains the total amount due, the cash provided by the customer, and the currency type.
+ * All fields are mandatory and must be valid values.
  * </p>
  */
 public record ChangeRequest(
@@ -31,5 +32,13 @@ public record ChangeRequest(
                 format = "double",
                 example = "20.00"
         )
-        BigDecimal cashGiven
+        BigDecimal cashGiven,
+
+        @NotBlank(message = "Currency is required.")
+        @Schema(
+                description = "The currency code (e.g., EUR, USD, GBP).",
+                type = "string",
+                example = "EUR"
+        )
+        String currency
 ) {}
