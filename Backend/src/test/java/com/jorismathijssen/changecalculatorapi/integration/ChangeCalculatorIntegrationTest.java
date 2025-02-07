@@ -2,7 +2,6 @@ package com.jorismathijssen.changecalculatorapi.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jorismathijssen.changecalculatorapi.dto.ChangeRequest;
-import com.jorismathijssen.changecalculatorapi.dto.ChangeResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -61,7 +60,7 @@ public class ChangeCalculatorIntegrationTest {
         ChangeRequest request = new ChangeRequest(
                 new BigDecimal("10.00"),
                 new BigDecimal("20.00"),
-                "XYZ"  // Unsupported currency
+                "GLD"  // Gulden is an unsupported currency
         );
 
         mockMvc.perform(post("/api/change")
