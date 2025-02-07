@@ -4,12 +4,16 @@ import { fetchChange } from "../services/apiService";
 import icon from "../assets/icon.webp";
 
 export default function CashRegister() {
-  const [purchaseAmount, setPurchaseAmount] = useState();
-  const [cashGiven, setCashGiven] = useState();
+  const [purchaseAmount, setPurchaseAmount] = useState("");
+  const [cashGiven, setCashGiven] = useState("");
+  const [currency, setCurrency] = useState("EUR"); // Default currency
   const [loading, setLoading] = useState(false);
   const [changeData, setChangeData] = useState(null);
   const [error, setError] = useState(null);
-  const [inputError, setInputError] = useState({ purchase: false, cash: false });
+  const [inputError, setInputError] = useState({
+    purchase: false,
+    cash: false,
+  });
 
   const handleCalculateChange = async () => {
     let isValid = true;
@@ -37,7 +41,7 @@ export default function CashRegister() {
     setInputError({ purchase: false, cash: false });
 
     try {
-      const data = await fetchChange(purchaseAmount, cashGiven);
+      const data = await fetchChange(purchaseAmount, cashGiven, currency); // Pass currency
       setChangeData(data);
     } catch (err) {
       setError(err.message);
@@ -57,32 +61,66 @@ export default function CashRegister() {
   return (
     <div className="flex h-screen w-screen">
       <div className="w-1/4 bg-gray-100 p-8 flex flex-col">
-        <h1 className="text-xl font-bold text-gray-700 mb-6">Wisselgeld Systeem 1.0</h1>
+        <h1 className="text-xl font-bold text-gray-700 mb-6">
+          Wisselgeld Systeem 1.1
+        </h1>
+
+        {/* Currency Selection */}
         <div className="mb-4">
-          <label className="block text-gray-600 font-medium mb-1">Bedrag (€)</label>
+          <label className="block text-gray-600 font-medium mb-1">Valuta</label>
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="EUR">Euro (€)</option>
+            <option value="USD">US Dollar ($)</option>
+            <option value="GBP">British Pound (£)</option>
+          </select>
+        </div>
+
+        {/* Purchase Amount Input */}
+        <div className="mb-4">
+          <label className="block text-gray-600 font-medium mb-1">
+            Aankoopbedrag (
+            {currency === "EUR" ? "€" : currency === "USD" ? "$" : "£"})
+          </label>
           <input
             type="number"
             value={purchaseAmount}
             onChange={(e) => setPurchaseAmount(Number(e.target.value))}
             className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              inputError.purchase ? "border-red-500 ring-red-500" : "focus:ring-blue-500"
+              inputError.purchase
+                ? "border-red-500 ring-red-500"
+                : "focus:ring-blue-500"
             }`}
             placeholder="Voer aankoopbedrag in"
           />
         </div>
+
+        {/* Cash Given Input */}
         <div className="mb-4">
-          <label className="block text-gray-600 font-medium mb-1">Contant (€)</label>
+          <label className="block text-gray-600 font-medium mb-1">
+            Contant ({currency === "EUR" ? "€" : currency === "USD" ? "$" : "£"}
+            )
+          </label>
           <input
             type="number"
             value={cashGiven}
             onChange={(e) => setCashGiven(Number(e.target.value))}
             className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              inputError.cash ? "border-red-500 ring-red-500" : "focus:ring-blue-500"
+              inputError.cash
+                ? "border-red-500 ring-red-500"
+                : "focus:ring-blue-500"
             }`}
             placeholder="Voer betaald bedrag in"
           />
         </div>
+
+        {/* Error Message */}
         {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        {/* Action Buttons */}
         <div className="flex space-x-4">
           <button
             onClick={handleCalculateChange}
@@ -99,7 +137,14 @@ export default function CashRegister() {
           </button>
         </div>
       </div>
-      <ChangeDisplay loading={loading} changeData={changeData} error={error} icon={icon} />
+
+      {/* Change Display Component */}
+      <ChangeDisplay
+        loading={loading}
+        changeData={changeData}
+        error={error}
+        icon={icon}
+      />
     </div>
   );
 }
