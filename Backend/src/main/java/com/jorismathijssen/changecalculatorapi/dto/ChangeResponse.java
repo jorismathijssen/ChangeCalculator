@@ -1,6 +1,7 @@
 package com.jorismathijssen.changecalculatorapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -34,4 +35,5 @@ public record ChangeResponse(
                 example = "EUR"
         )
         String currency
-) {}
+) {
+}
