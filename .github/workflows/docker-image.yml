@@ -30,13 +30,12 @@ jobs:
     # Build and push the frontend (React + Nginx)
     - name: Build Frontend Docker Image
       run: docker build -t ${{ env.FRONTEND_IMAGE }} ./Frontend
+
+    - name: Push Frontend Docker Image
+      run: docker push ${{ env.FRONTEND_IMAGE }}
     
     - name: Build Backend Docker Image
       run: docker build -t ${{ env.BACKEND_IMAGE }} ./Backend
-
-    # Build and push the backend (Spring Boot + Java)
-    - name: Build Backend Docker Image
-      run: docker build -t ${{ env.BACKEND_IMAGE }} ./backend
 
     - name: Push Backend Docker Image
       run: docker push ${{ env.BACKEND_IMAGE }}
