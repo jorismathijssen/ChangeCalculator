@@ -5,8 +5,8 @@ FROM amazoncorretto:21 AS build
 WORKDIR /app
 
 # Copy only the build-related files first to leverage caching
-COPY gradle gradle
-COPY build.gradle settings.gradle gradlew ./
+COPY gradle/wrapper gradle/wrapper
+COPY gradlew ./
 RUN chmod +x gradlew
 
 # Download dependencies to cache them

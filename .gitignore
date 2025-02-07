@@ -1,5 +1,7 @@
-# Gradle-specific files
+# Ignore gradle folder, but keep the wrapper
 .gradle/
+!gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.jar
 build/
 out/
 !gradle/wrapper/gradle-wrapper.jar
