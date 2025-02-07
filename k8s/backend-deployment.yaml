@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: change-calculator-backend
+  labels:
+    app: change-calculator-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: change-calculator-backend
+  template:
+    metadata:
+      labels:
+        app: change-calculator-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/jorismathijssen/change-calculator-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_OPTS
+              value: "-Xms256m -Xmx512m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: change-calculator-backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

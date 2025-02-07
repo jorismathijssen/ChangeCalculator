@@ -51,17 +51,11 @@ hs_err_pid*
 !src/main/resources/application.yml
 !src/main/resources/application.yaml
 !src/main/resources/application.properties
+!k8s/*.yaml
 
 # Test reports
 test-output/
 surefire-reports/
-
-# Kubernetes files (if used)
-k8s/
-helm/
-!backend-deployment.yaml
-!frontend-deployment.yaml
-!ingress.yaml
 
 
 # Temporary files
