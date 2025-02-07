@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChangeDisplay from "./ChangeDisplay";
 import { fetchChange } from "../services/apiService";
 import icon from "../assets/icon.webp";
@@ -14,6 +14,9 @@ export default function CashRegister() {
     purchase: false,
     cash: false,
   });
+
+  // State to handle typing delay
+  const [typingTimeout, setTypingTimeout] = useState(null);
 
   const handleCalculateChange = async () => {
     let isValid = true;
@@ -49,6 +52,17 @@ export default function CashRegister() {
       setLoading(false);
     }
   };
+
+  // Auto-calculate change when the user stops typing in "Contant"
+  useEffect(() => {
+    if (cashGiven && purchaseAmount && cashGiven >= purchaseAmount) {
+      // Clear any existing timeout
+      if (typingTimeout) clearTimeout(typingTimeout);
+
+      // Set a new timeout
+      setTypingTimeout(setTimeout(() => handleCalculateChange(), 500));
+    }
+  }, [cashGiven]); // Triggers only when cashGiven changes
 
   const handleReset = () => {
     setPurchaseAmount("");
