@@ -69,7 +69,8 @@ class ChangeCalculatorServiceTest {
             "1.00, 2.00, 1.00, EUR",
             "0.05, 1.00, 0.95, EUR",
             "50.00, 100.00, 50.00, USD",
-            "9.99, 20.00, 10.01, GBP"
+            "9.99, 20.00, 10.01, GBP",
+            "9.80, 10.00, 0.20, EUR"
     })
     void shouldCalculateCorrectChange(BigDecimal totalAmount, BigDecimal cashGiven, BigDecimal expectedChange, String currency) {
         // Arrange
@@ -79,10 +80,14 @@ class ChangeCalculatorServiceTest {
         ChangeResponse response = service.calculateChange(request);
 
         // Assert
-        assertEquals(expectedChange, response.changeAmount());
-        assertNotNull(response.changeBreakdown());
-        assertFalse(response.changeBreakdown().isEmpty());
-        assertEquals(currency, response.currency()); // Ensures currency is correct
+        assertEquals(
+                expectedChange.setScale(2, RoundingMode.HALF_EVEN),
+                response.changeAmount(),
+                "Change amount is not matching the expected two-decimal value"
+        );
+        assertNotNull(response.changeBreakdown(), "Breakdown map should not be null");
+        assertFalse(response.changeBreakdown().isEmpty(), "Breakdown map should not be empty");
+        assertEquals(currency, response.currency(), "Returned currency should match request");
     }
 
     @Test

@@ -1,28 +1,26 @@
-# Use Node.js as the base image for building
+##############################
+# Stap 1: React build
+##############################
 FROM node:20-alpine AS build
 
-# Set working directory
 WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Copy package.json and install dependencies
-COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
-
-# Copy project files and build
 COPY . .
 RUN npm run build
 
-# Debug: Ensure the `dist/` directory exists
-RUN ls -la dist/
-
-# Use Nginx to serve the Vite-built React app
+##############################
+# Stap 2: Nginx
+##############################
 FROM nginx:alpine
 
-# Copy built files to Nginx public directory
+# Kopieer alleen de build-output (dist) naar de webroot van Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose the frontend port
-EXPOSE 80
+# Optioneel: Kopieer een simpele custom config voor SPA
+# (zie onderaan voor minimal.conf)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Start Nginx
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

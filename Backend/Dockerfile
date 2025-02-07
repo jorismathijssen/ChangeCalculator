@@ -1,27 +1,41 @@
 # Use an official OpenJDK 21 image as a base for building
-FROM openjdk:21-jdk-slim AS build
+FROM amazoncorretto:21 AS build
 
+# Set working directory
 WORKDIR /app
 
-# Copy source code
-COPY . .
-
-# Grant execute permissions to Gradlew
+# Copy only the build-related files first to leverage caching
+COPY gradle gradle
+COPY build.gradle settings.gradle gradlew ./
 RUN chmod +x gradlew
 
-# Build the application inside the container
+# Download dependencies to cache them
+RUN ./gradlew dependencies --no-daemon
+
+# Copy the rest of the source code
+COPY src src
+
+# Build the application
 RUN ./gradlew build --no-daemon
 
-# Use a smaller final image
-FROM openjdk:21-jdk-slim
+# Use a minimal runtime image for production
+FROM amazoncorretto:21-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Copy the JAR file from the build stage
+# Copy only the built JAR file from the previous stage
 COPY --from=build /app/build/libs/*.jar app.jar
+
+# Create a non-root user for security
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
 
 # Expose the application's port
 EXPOSE 8080
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Set environment variables (can be overridden in Kubernetes)
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
+
+# Run the application with proper signal handling
+ENTRYPOINT exec java $JAVA_OPTS -jar app.jar

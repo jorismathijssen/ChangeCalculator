@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ public class ChangeCalculatorService {
 
     private final Map<String, List<BigDecimal>> currencyDenominations;
     private final CurrencyConfig currencyConfig;
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
+
 
     /**
      * Constructor to inject currency denominations from application configuration.
@@ -88,15 +91,12 @@ public class ChangeCalculatorService {
         return breakdown;
     }
 
-    /**
-     * Formats a currency denomination for display.
-     *
-     * @param value    The denomination value.
-     * @param currency The currency code (e.g., "EUR", "USD", "GBP").
-     * @return A formatted string representation of the denomination with the correct currency symbol.
-     */
     private String formatDenomination(BigDecimal value, String currency) {
         String symbol = currencyConfig.getSymbolForCurrency(currency);
-        return value.compareTo(BigDecimal.ONE) >= 0 ? symbol + value.intValue() : symbol + value;
+        BigDecimal scaled = value.setScale(2, RoundingMode.HALF_EVEN);
+
+        return symbol + (scaled.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO) == 0
+                ? scaled.setScale(0, RoundingMode.UNNECESSARY).toPlainString()
+                : scaled.toPlainString());
     }
 }
