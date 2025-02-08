@@ -41,7 +41,10 @@ jobs:
       - name: Install gke-gcloud-auth-plugin
         run: |
           echo "Installing gke-gcloud-auth-plugin..."
-          sudo apt-get update && sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+          sudo apt-get update && sudo apt-get install -y google-cloud-cli-gke-gcloud-auth-plugin
+
+      - name: Verify gke-gcloud-auth-plugin Installation
+        run: gke-gcloud-auth-plugin --version
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
@@ -61,6 +64,21 @@ jobs:
 
       - name: Debug - List Kubernetes Contexts
         run: kubectl config get-contexts
+
+      - name: Debug - List Kubernetes Namespaces
+        run: kubectl get namespaces
+
+      - name: Debug - Check if k8s Directory Exists
+        run: |
+          if [ -d "k8s" ]; then
+            echo "✅ k8s directory exists."
+          else
+            echo "❌ ERROR: k8s directory NOT FOUND!"
+            exit 1
+          fi
+
+      - name: Debug - List Files in k8s Directory
+        run: ls -R k8s/
 
       - name: Deploy to GKE
         run: |
