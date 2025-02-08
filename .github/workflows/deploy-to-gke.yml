@@ -1,0 +1,94 @@
+name: Deploy to GKE using GHCR
+
+on:
+  push:
+    branches:
+      - main  # Of een andere branch voor deployment
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Authenticate with GitHub Container Registry (GHCR)
+        run: |
+          echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Get GKE Credentials
+        run: |
+          gcloud container clusters get-credentials my-cluster --zone=europe-west1-b --project=YOUR_PROJECT_ID
+
+      - name: Deploy to GKE using GHCR images
+        run: |
+          kubectl delete deployment backend-api --ignore-not-found
+          kubectl delete deployment frontend-app --ignore-not-found
+
+          kubectl apply -f k8s/backend-service.yaml
+          kubectl apply -f k8s/frontend-service.yaml
+
+          kubectl apply -f - <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: backend-api
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: backend-api
+            template:
+              metadata:
+                labels:
+                  app: backend-api
+              spec:
+                containers:
+                - name: backend-api
+                  image: ghcr.io/YOUR_GITHUB_USERNAME/backend-api:latest
+                  ports:
+                  - containerPort: 8080
+                  imagePullSecrets:
+                  - name: ghcr-secret
+          EOF
+
+          kubectl apply -f - <<EOF
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: frontend-app
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: frontend-app
+            template:
+              metadata:
+                labels:
+                  app: frontend-app
+              spec:
+                containers:
+                - name: frontend-app
+                  image: ghcr.io/YOUR_GITHUB_USERNAME/frontend-app:latest
+                  ports:
+                  - containerPort: 3000
+                  imagePullSecrets:
+                  - name: ghcr-secret
+          EOF
+
+          kubectl rollout status deployment/backend-api
+          kubectl rollout status deployment/frontend-app
+
+      - name: Verify Deployment
+        run: |
+          kubectl get services
+          kubectl get pods
