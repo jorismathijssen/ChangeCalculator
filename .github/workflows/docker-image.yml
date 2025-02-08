@@ -2,7 +2,7 @@ name: Build, Push and Deploy to GKE
 
 on:
   push:
-    branches: [ "main" ]  # Ensure branch name is consistent
+    branches: [ "master" ]  # Ensure branch name is consistent
   workflow_dispatch:
 
 jobs:
