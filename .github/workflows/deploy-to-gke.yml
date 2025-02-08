@@ -3,7 +3,10 @@ name: Deploy to GKE using GHCR
 on:
   push:
     branches:
-      - main  # Of een andere branch voor deployment
+      - main
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   deploy:
