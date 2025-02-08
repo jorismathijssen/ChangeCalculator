@@ -41,7 +41,7 @@ jobs:
 
       - name: Get GKE Credentials
         run: |
-          gcloud container clusters get-credentials my-cluster --zone europe-west1-b --project examplechangecalculator
+          gcloud container clusters get-credentials chance-cluster --zone europe-west1-b --project examplechangecalculator
 
       - name: Deploy to GKE
         run: |
