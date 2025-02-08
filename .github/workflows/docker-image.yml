@@ -1,41 +1,55 @@
-name: Build and Push Docker Images
+name: Build, Push and Deploy to GKE
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-  workflow_dispatch: # Allows manual triggering
+    branches: [ "main" ]  # Ensure branch name is consistent
+  workflow_dispatch:
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-
     permissions:
       packages: write
       contents: read
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: Set Image Names
+    - name: Build and Push Docker Images
       run: |
-        echo "FRONTEND_IMAGE=ghcr.io/${{ github.repository_owner }}/frontend:latest" >> $GITHUB_ENV
-        echo "BACKEND_IMAGE=ghcr.io/${{ github.repository_owner }}/backend:latest" >> $GITHUB_ENV
+        docker build -t ghcr.io/${{ github.repository_owner }}/frontend:latest ./Frontend
+        docker push ghcr.io/${{ github.repository_owner }}/frontend:latest
+        docker build -t ghcr.io/${{ github.repository_owner }}/backend:latest ./Backend
+        docker push ghcr.io/${{ github.repository_owner }}/backend:latest
 
-    # Build and push the frontend (React + Nginx)
-    - name: Build Frontend Docker Image
-      run: docker build -t ${{ env.FRONTEND_IMAGE }} ./Frontend
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
 
-    - name: Push Frontend Docker Image
-      run: docker push ${{ env.FRONTEND_IMAGE }}
-    
-    - name: Build Backend Docker Image
-      run: docker build -t ${{ env.BACKEND_IMAGE }} ./Backend
+    steps:
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
-    - name: Push Backend Docker Image
-      run: docker push ${{ env.BACKEND_IMAGE }}
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Get GKE Credentials
+        run: |
+          gcloud container clusters get-credentials my-cluster --zone europe-west1-b --project YOUR_PROJECT_ID
+
+      - name: Deploy to GKE
+        run: |
+          kubectl apply -f k8s/
+          kubectl rollout status deployment/backend-api
+          kubectl rollout status deployment/frontend-app
+
+      - name: Verify Deployment
+        run: |
+          kubectl get services
+          kubectl get pods
