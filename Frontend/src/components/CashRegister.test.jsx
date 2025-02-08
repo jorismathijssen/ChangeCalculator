@@ -98,4 +98,18 @@ describe("CashRegister Component", () => {
     expect(screen.getByText(/Aankoopbedrag \(£\)/i)).toBeInTheDocument();
   });
 
+  it("7. Does not allow negative values in input fields", () => {
+    render(<CashRegister />);
+  
+    const purchaseInput = screen.getByPlaceholderText(/Voer aankoopbedrag in/i);
+    const cashInput = screen.getByPlaceholderText(/Voer betaald bedrag in/i);
+  
+    fireEvent.change(purchaseInput, { target: { value: "-10" } });
+    fireEvent.change(cashInput, { target: { value: "-5" } });
+  
+    expect(purchaseInput.value).not.toContain("-");
+    expect(cashInput.value).not.toContain("-");
+  });
+  
+
 });

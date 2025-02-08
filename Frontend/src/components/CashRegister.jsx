@@ -101,8 +101,12 @@ export default function CashRegister() {
           </label>
           <input
             type="number"
+            min="1"
             value={purchaseAmount}
-            onChange={(e) => setPurchaseAmount(Number(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value;
+              setPurchaseAmount(value === "" ? "" : Math.max(0, Number(value)));
+            }}
             className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
               inputError.purchase
                 ? "border-red-500 ring-red-500"
@@ -120,8 +124,12 @@ export default function CashRegister() {
           </label>
           <input
             type="number"
+            min="1"
             value={cashGiven}
-            onChange={(e) => setCashGiven(Number(e.target.value))}
+            onChange={(e) => {
+              const value = e.target.value;
+              setCashGiven(value === "" ? "" : Math.max(0, Number(value)));
+            }}
             className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
               inputError.cash
                 ? "border-red-500 ring-red-500"
