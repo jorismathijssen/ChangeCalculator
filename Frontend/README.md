@@ -2,61 +2,69 @@
 
 Dit is de frontend van het Wisselgeld Systeem, een applicatie die berekent hoeveel wisselgeld een winkelmedewerker moet teruggeven aan een klant.
 
-## 📌 Vereisten
-Zorg ervoor dat je de volgende software hebt geïnstalleerd voordat je de applicatie start:
+## Vereisten
+
+Zorg ervoor dat de volgende software is geïnstalleerd voordat je de applicatie start:
 
 - **Node.js** (versie 20 of hoger aanbevolen)
 - **npm**
 
-## 🚀 Installatie en Opstarten
+## Installatie en Opstarten
 
-### 1️⃣ Installeer dependencies
+### 1. Installeer dependencies
+
+Voer de volgende opdracht uit om de benodigde pakketten te installeren:
 
 ```sh
 npm install
 ```
 
-### 2️⃣ Maak een `.env` bestand aan
+### 2. Maak een `.env`-bestand aan
 
-Indien je de standaard backend URL (`http://localhost:8080`) gebruikt, kun je het voorbeeldbestand `.env.example` kopiëren:
+Als je de standaard backend-URL (`http://localhost:8080`) gebruikt, kun je het voorbeeldbestand `.env.example` kopiëren:
 
 ```sh
 cp .env.example .env
 ```
 
-Indien nodig, pas de API URL aan in het `.env` bestand.
+Pas indien nodig de API-URL aan in het `.env`-bestand.
 
-### 3️⃣ Start de ontwikkelserver
+### 3. Start de ontwikkelserver
+
+Start de applicatie met:
 
 ```sh
 npm run dev
 ```
 
-Dit start de applicatie en opent een browservenster op `http://localhost:5173`
-## ⚙️ Configuratie
-De frontend communiceert met een backend API. Voor meer informatie zie de [backend instructies](../Backend/README.md)
+De applicatie wordt gestart en opent automatisch een browservenster op `http://localhost:5173`.
 
-## 🛠️ Builden voor productie
+## Configuratie
+
+De frontend communiceert met een backend API. Raadpleeg de [backend instructies](../Backend/README.md) voor meer informatie over de configuratie.
+
+## Builden voor productie
+
+Om een geoptimaliseerde versie van de applicatie te genereren:
 
 ```sh
 npm run build
 ```
 
-Dit genereert een `dist/` map met de geoptimaliseerde productieversie van de applicatie.
+Dit maakt een `dist/`-map aan met de productieversie van de applicatie.
 
-## ✅ Linter en Formatteren
+## Code Kwaliteit
 
-Om de code te controleren en te formatteren:
+Om de code te controleren en te formatteren, voer de volgende opdrachten uit:
 
 ```sh
 npm run lint
 npm run format
 ```
 
-## 🧪 Testen
+## Testen
 
-Indien je tests hebt geïmplementeerd, draai ze met:
-
+De unit tests kunnen worden uitgevoerd met:
 ```sh
 npm test
 ```
