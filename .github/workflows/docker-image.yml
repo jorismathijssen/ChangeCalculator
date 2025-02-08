@@ -33,49 +33,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      - name: Install Google Cloud SDK
-        run: |
-          sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
 
-      - name: Install gke-gcloud-auth-plugin via gcloud
-        run: |
-          echo "Installing gke-gcloud-auth-plugin using gcloud..."
-          gcloud components install gke-gcloud-auth-plugin --quiet
+    - name: Set up Google Cloud SDK (Includes gke-gcloud-auth-plugin)
+      uses: google-github-actions/setup-gcloud@v1
 
-      - name: Verify gke-gcloud-auth-plugin Installation
-        run: gke-gcloud-auth-plugin --version
+    - name: Get GKE Credentials
+      run: gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
 
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
+    - name: Deploy to GKE
+      run: |
+        kubectl apply -f k8s/
+        kubectl rollout status deployment/backend-api
+        kubectl rollout status deployment/frontend-app
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Set Auth Plugin Env Variable
-        run: echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
-
-      - name: Get GKE Credentials
-        run: |
-          gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
-          kubectl config set-credentials gke-auth --exec-command=gke-gcloud-auth-plugin
-
-      - name: Debug - List Kubernetes Contexts
-        run: kubectl config get-contexts
-
-      - name: Deploy to GKE
-        run: |
-          kubectl apply -f k8s/
-          kubectl rollout status deployment/backend-api
-          kubectl rollout status deployment/frontend-app
-
-      - name: Verify Deployment
-        run: |
-          kubectl get services
-          kubectl get pods
+    - name: Verify Deployment
+      run: |
+        kubectl get services
+        kubectl get pods
