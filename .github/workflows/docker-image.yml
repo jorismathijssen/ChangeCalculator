@@ -1,8 +1,8 @@
-name: Build, Push and Deploy to GKE
+name: Build, Push, and Deploy to GKE
 
 on:
   push:
-    branches: [ "master" ]  # Ensure branch name is consistent
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -13,8 +13,18 @@ jobs:
       contents: read
 
     steps:
+    - name: Enable Debug Logging
+      run: |
+        echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
+        echo "GITHUB_STEP_DEBUG=true" >> $GITHUB_ENV
+
     - name: Checkout Repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Ensures full history and all files are present
+
+    - name: Debug - List Files in Root
+      run: ls -R
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -31,6 +41,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Enable Debug Logging
+        run: |
+          echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
+          echo "GITHUB_STEP_DEBUG=true" >> $GITHUB_ENV
+
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Debug - List Files in Root
+        run: ls -R
+
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
@@ -42,6 +65,21 @@ jobs:
       - name: Get GKE Credentials
         run: |
           gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
+
+      - name: Debug - List Kubernetes Contexts
+        run: kubectl config get-contexts
+
+      - name: Debug - Check If k8s Directory Exists
+        run: |
+          if [ -d "k8s" ]; then
+            echo "✅ k8s directory exists."
+          else
+            echo "❌ ERROR: k8s directory NOT FOUND!"
+            exit 1
+          fi
+
+      - name: Debug - List Files in k8s Directory
+        run: ls -R k8s/
 
       - name: Deploy to GKE
         run: |
