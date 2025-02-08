@@ -45,9 +45,15 @@ jobs:
 
     - name: Set up Google Cloud SDK (Includes gke-gcloud-auth-plugin)
       uses: google-github-actions/setup-gcloud@v1
+      with:
+        install_components: 'gke-gcloud-auth-plugin'
+
+    - name: Verify Plugin Installation
+      run: gke-gcloud-auth-plugin --version
 
     - name: Get GKE Credentials
-      run: gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
+      run: |
+        gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
 
     - name: Deploy to GKE
       run: |
