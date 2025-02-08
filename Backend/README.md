@@ -1,18 +1,17 @@
 # Wisselgeld Systeem - Backend
 
-Dit is de backend van het Wisselgeld Systeem, ontwikkeld in **Java met Spring Boot**. De backend ontvangt input van de
-frontend en retourneert het juiste wisselgeld in biljetten en munten.
+Dit is de backend van het Wisselgeld Systeem, ontwikkeld in **Java met Spring Boot**. De backend ontvangt input van de frontend en retourneert het juiste wisselgeld in biljetten en munten.
 
-## 📌 Vereisten
+## Vereisten
 
-Zorg ervoor dat je de volgende software hebt geïnstalleerd voordat je de backend start:
+Zorg ervoor dat de volgende software is geïnstalleerd voordat je de backend start:
 
 - **Java 21**
 - **Gradle**
 
-## 🚀 Installatie en Opstarten
+## Installatie en Opstarten
 
-### 1️⃣ Build de applicatie
+### 1. Build de applicatie
 
 ```sh
 ./gradlew build
@@ -20,28 +19,29 @@ Zorg ervoor dat je de volgende software hebt geïnstalleerd voordat je de backen
 
 Dit genereert een distributiebestand in `build/libs/`.
 
-### 2️⃣ Backend starten
+### 2. Backend starten
 
-#### 🔹 In **normale modus**
+#### Normale modus
+
+Start de applicatie met:
 
 ```sh
 ./gradlew bootRun
 ```
 
-Of als je direct het gegenereerde JAR-bestand wilt uitvoeren:
+Of voer direct het gegenereerde JAR-bestand uit:
 
 ```sh
 java -jar build/libs/*.jar
 ```
 
-## ⚙️ API Endpoints
+## API Endpoints
 
-De backend API draait standaard op `http://localhost:8080`. Gebruik een tool zoals Postman of cURL om verzoeken te
-testen.
+De backend API draait standaard op `http://localhost:8080`. Gebruik een tool zoals Postman of cURL om verzoeken te testen.
 
 Zie de [Swagger-documentatie](http://localhost:8080/swagger-ui.html) zodra de backend draait.
 
-## 🛠️ Testen
+## Testen
 
 Voer unit-tests uit met:
 
@@ -49,7 +49,7 @@ Voer unit-tests uit met:
 ./gradlew test
 ```
 
-## 🚀 Build en Distributie
+## Build en Distributie
 
 Wil je een productieversie bouwen?
 
