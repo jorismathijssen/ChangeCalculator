@@ -13,18 +13,10 @@ jobs:
       contents: read
 
     steps:
-    - name: Enable Debug Logging
-      run: |
-        echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
-        echo "GITHUB_STEP_DEBUG=true" >> $GITHUB_ENV
-
     - name: Checkout Repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Ensures full history and all files are present
-
-    - name: Debug - List Files in Root
-      run: ls -R
+        fetch-depth: 0
 
     - name: Log in to GitHub Container Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -41,18 +33,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Enable Debug Logging
-        run: |
-          echo "GITHUB_ACTIONS_DEBUG=true" >> $GITHUB_ENV
-          echo "GITHUB_STEP_DEBUG=true" >> $GITHUB_ENV
-
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Debug - List Files in Root
-        run: ls -R
+      - name: Install gke-gcloud-auth-plugin
+        run: |
+          echo "Installing gke-gcloud-auth-plugin..."
+          sudo apt-get update && sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
@@ -62,24 +51,16 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      - name: Set Auth Plugin Env Variable
+        run: echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+
       - name: Get GKE Credentials
         run: |
           gcloud container clusters get-credentials chance-cluster --zone europe-west1 --project examplechangecalculator
+          kubectl config set-credentials gke-auth --exec-command=gke-gcloud-auth-plugin
 
       - name: Debug - List Kubernetes Contexts
         run: kubectl config get-contexts
-
-      - name: Debug - Check If k8s Directory Exists
-        run: |
-          if [ -d "k8s" ]; then
-            echo "✅ k8s directory exists."
-          else
-            echo "❌ ERROR: k8s directory NOT FOUND!"
-            exit 1
-          fi
-
-      - name: Debug - List Files in k8s Directory
-        run: ls -R k8s/
 
       - name: Deploy to GKE
         run: |
