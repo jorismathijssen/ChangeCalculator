@@ -100,6 +100,11 @@ jobs:
         kubectl rollout status deployment/backend-api
         kubectl rollout status deployment/frontend-app
 
+    - name: Force Pods to Pull the New Image
+      run: |
+        kubectl rollout restart deployment/backend-api
+        kubectl rollout restart deployment/frontend-app
+
     - name: Verify Deployment
       run: |
         kubectl get services
