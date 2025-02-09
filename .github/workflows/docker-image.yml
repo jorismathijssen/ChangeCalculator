@@ -23,10 +23,10 @@ jobs:
       with:
         node-version: 18
 
-    - name: Install Dependencies (React)
+    - name: Install Dependencies (React) (Including devDependencies)
       run: |
         cd Frontend
-        npm install
+        npm install --include=dev
 
     - name: Run React Tests
       run: |
