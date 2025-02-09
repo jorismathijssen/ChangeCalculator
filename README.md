@@ -49,6 +49,15 @@ Voor volledige API-documentatie en interactie met de endpoints, bekijk de **Swag
 
 De applicatie draait momenteel op **Google Kubernetes Engine (GKE)**. De deployment naar deze omgeving wordt beheerd via **GitHub Actions**. De applicatie is [hier](http://130.211.90.197/) te vinden
 
+## Automatische Tests in GitHub Actions
+Om de betrouwbaarheid van de applicatie te waarborgen, zijn er automatische tests toegevoegd aan de GitHub Actions workflow. Deze tests worden uitgevoerd voordat de Docker-images worden gebouwd en naar Google Kubernetes Engine (GKE) worden gedeployed.
+
+De workflow voert de volgende tests uit:
+
+Frontend tests (Vitest): Unit tests voor de React-componenten.
+Backend tests (JUnit, Spring Boot): Unit- en integratietests voor de wisselgeldberekening.
+Voor meer details over de implementatie en configuratie van deze tests, zie de [Github Actions Workflow](/.github/docker-iamge.yml).
+
 ## Features en Uitbreidingen
 
 ### Basisfunctionaliteit
