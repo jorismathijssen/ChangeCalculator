@@ -56,7 +56,7 @@ De workflow voert de volgende tests uit:
 
 Frontend tests (Vitest): Unit tests voor de React-componenten.
 Backend tests (JUnit, Spring Boot): Unit- en integratietests voor de wisselgeldberekening.
-Voor meer details over de implementatie en configuratie van deze tests, zie de [Github Actions Workflow](/.github/docker-iamge.yml).
+Voor meer details over de implementatie en configuratie van deze tests, zie de [Github Actions Workflow](.github/workflows/docker-image.yml).
 
 ## Features en Uitbreidingen
 
