@@ -6,7 +6,46 @@ on:
   workflow_dispatch:
 
 jobs:
+  Get-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install Dependencies (React)
+      run: |
+        cd Frontend
+        npm install
+
+    - name: Run React Tests
+      run: |
+        cd Frontend
+        npm test -- --coverage
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Run Java Tests
+      run: |
+        cd Backend
+        ./gradlew test
+
   build-and-push:
+    needs: build-and-test  # Ensure tests pass before building images
     runs-on: ubuntu-latest
     permissions:
       packages: write
