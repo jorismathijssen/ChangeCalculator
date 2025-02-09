@@ -109,7 +109,6 @@ describe("CashRegister Component", () => {
   
     expect(purchaseInput.value).not.toContain("-");
     expect(cashInput.value).not.toContain("-");
-  });
-  
+  });  
 
 });
