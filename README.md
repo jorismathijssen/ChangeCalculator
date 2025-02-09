@@ -66,11 +66,12 @@ Voor meer details over de implementatie en configuratie van deze tests, zie de [
 - Invoer van aankoopbedrag en contant betaald bedrag
 - Berekening van het wisselgeld in optimale denominaties
 - Weergave van de wisselgeldspecificaties in de frontend
+- Ondersteuning voor verschillende munteenheden, zoals EUR, GBP en USD.
 
-### Extra Functionaliteiten (optioneel)
-- **Kubernetes-compatibiliteit:** De applicatie kan draaien en [draait](http://130.211.90.197/) binnen een Kubernetes-cluster.
-- **Automatische tests:** Unit- en integratietests zijn toegevoegd om de betrouwbaarheid te garanderen.
-- **Meerdere valuta:** Ondersteuning voor verschillende munteenheden, zoals EUR, GBP en USD.
+### Extra Functionaliteiten
+- Kubernetes-compatibiliteit: De applicatie kan draaien en [draait](http://130.211.90.197/) binnen een Kubernetes-cluster.
+- Automatische tests: Unit- en integratietests zijn toegevoegd om de betrouwbaarheid te garanderen.
+- Afvinken van denominaties als leuke gimmick
 
 ## Installatie en Gebruik
 
