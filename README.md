@@ -1,5 +1,7 @@
 # ChangeCalculatorAPI
 
+[![DEMO](https://img.shields.io/badge/Live%20Demo-%23009688?style=for-the-badge&logo=google-cloud&logoColor=white)](http://130.211.90.197/)
+
 [![Build & Deploy to GKE](https://github.com/jorismathijssen/ChangeCalculator/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/jorismathijssen/ChangeCalculator/actions/workflows/docker-image.yml)
 
 De **Change Calculator API** helpt winkelmedewerkers bij het berekenen van het wisselgeld dat zij aan klanten moeten teruggeven.
