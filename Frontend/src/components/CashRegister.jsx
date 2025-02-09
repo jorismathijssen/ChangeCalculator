@@ -6,28 +6,30 @@ import icon from "../assets/icon.webp";
 export default function CashRegister() {
   const [purchaseAmount, setPurchaseAmount] = useState("");
   const [cashGiven, setCashGiven] = useState("");
-  const [currency, setCurrency] = useState("EUR"); // Default currency
+  const [currency, setCurrency] = useState("EUR");
   const [loading, setLoading] = useState(false);
   const [changeData, setChangeData] = useState(null);
   const [error, setError] = useState(null);
+  const [resetChecked, setResetChecked] = useState(false);
   const [inputError, setInputError] = useState({
     purchase: false,
     cash: false,
   });
-
-  // State to handle typing delay
   const [typingTimeout, setTypingTimeout] = useState(null);
 
   const handleCalculateChange = async () => {
+    let newPurchaseAmount = parseFloat(purchaseAmount);
+    let newCashGiven = parseFloat(cashGiven);
+
     let isValid = true;
     let newInputError = { purchase: false, cash: false };
 
-    if (!purchaseAmount || purchaseAmount <= 0) {
+    if (isNaN(newPurchaseAmount) || newPurchaseAmount <= 0) {
       newInputError.purchase = true;
       isValid = false;
     }
 
-    if (!cashGiven || cashGiven < purchaseAmount) {
+    if (isNaN(newCashGiven) || newCashGiven < newPurchaseAmount) {
       newInputError.cash = true;
       isValid = false;
     }
@@ -42,9 +44,10 @@ export default function CashRegister() {
     setChangeData(null);
     setError(null);
     setInputError({ purchase: false, cash: false });
+    setResetChecked((prev) => !prev);
 
     try {
-      const data = await fetchChange(purchaseAmount, cashGiven, currency); // Pass currency
+      const data = await fetchChange(newPurchaseAmount, newCashGiven, currency);
       setChangeData(data);
     } catch (err) {
       setError(err.message);
@@ -53,16 +56,21 @@ export default function CashRegister() {
     }
   };
 
-  // Auto-calculate change when the user stops typing in "Contant"
   useEffect(() => {
-    if (cashGiven && purchaseAmount && cashGiven >= purchaseAmount) {
-      // Clear any existing timeout
+    const newPurchaseAmount = parseFloat(purchaseAmount);
+    const newCashGiven = parseFloat(cashGiven);
+
+    if (
+      !isNaN(newPurchaseAmount) &&
+      newPurchaseAmount > 0 &&
+      !isNaN(newCashGiven) &&
+      newCashGiven >= newPurchaseAmount
+    ) {
       if (typingTimeout) clearTimeout(typingTimeout);
 
-      // Set a new timeout
       setTypingTimeout(setTimeout(() => handleCalculateChange(), 500));
     }
-  }, [cashGiven]); // Triggers only when cashGiven changes
+  }, [cashGiven]);
 
   const handleReset = () => {
     setPurchaseAmount("");
@@ -70,13 +78,14 @@ export default function CashRegister() {
     setChangeData(null);
     setError(null);
     setInputError({ purchase: false, cash: false });
+    setResetChecked((prev) => !prev);
   };
 
   return (
-    <div className="flex h-screen w-screen">
-      <div className="w-1/4 bg-gray-100 p-8 flex flex-col">
-        <h1 className="text-xl font-bold text-gray-700 mb-6">
-          Wisselgeld Systeem 1.1
+    <div className="flex flex-col md:flex-row h-screen w-screen">
+      <div className="w-full md:w-1/4 bg-gray-100 p-6 md:p-8 flex flex-col">
+        <h1 className="text-lg md:text-xl font-bold text-gray-700 mb-6 text-center md:text-left">
+          Wisselgeld Systeem
         </h1>
 
         {/* Currency Selection */}
@@ -85,7 +94,7 @@ export default function CashRegister() {
           <select
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
-            className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="EUR">Euro (€)</option>
             <option value="USD">US Dollar ($)</option>
@@ -101,13 +110,15 @@ export default function CashRegister() {
           </label>
           <input
             type="number"
-            min="1"
+            min="0"
             value={purchaseAmount}
             onChange={(e) => {
               const value = e.target.value;
-              setPurchaseAmount(value === "" ? "" : Math.max(0, Number(value)));
+              setPurchaseAmount(
+                value === "" ? "" : Math.max(0, parseFloat(value))
+              );
             }}
-            className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
               inputError.purchase
                 ? "border-red-500 ring-red-500"
                 : "focus:ring-blue-500"
@@ -124,13 +135,13 @@ export default function CashRegister() {
           </label>
           <input
             type="number"
-            min="1"
+            min="0"
             value={cashGiven}
             onChange={(e) => {
               const value = e.target.value;
-              setCashGiven(value === "" ? "" : Math.max(0, Number(value)));
+              setCashGiven(value === "" ? "" : Math.max(0, parseFloat(value)));
             }}
-            className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 ${
+            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
               inputError.cash
                 ? "border-red-500 ring-red-500"
                 : "focus:ring-blue-500"
@@ -140,20 +151,20 @@ export default function CashRegister() {
         </div>
 
         {/* Error Message */}
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
         {/* Action Buttons */}
-        <div className="flex space-x-4">
+        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
           <button
             onClick={handleCalculateChange}
-            className="w-1/2 bg-blue-500 text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition"
+            className="w-full md:w-1/2 bg-blue-500 text-white font-semibold py-3 rounded-lg hover:bg-blue-600 transition"
           >
             Bereken
           </button>
 
           <button
             onClick={handleReset}
-            className="w-1/2 bg-gray-400 text-white font-semibold py-2 rounded-lg hover:bg-gray-500 transition"
+            className="w-full md:w-1/2 bg-gray-400 text-white font-semibold py-3 rounded-lg hover:bg-gray-500 transition"
           >
             Reset
           </button>
@@ -165,6 +176,7 @@ export default function CashRegister() {
         loading={loading}
         changeData={changeData}
         error={error}
+        resetChecked={resetChecked}
         icon={icon}
       />
     </div>

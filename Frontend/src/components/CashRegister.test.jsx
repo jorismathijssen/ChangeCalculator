@@ -13,7 +13,7 @@ describe("CashRegister Component", () => {
   it("2. Displays an error message when input is invalid", async () => {
     render(<CashRegister />);
 
-    fireEvent.click(screen.getByText(/Bereken/i));
+    fireEvent.click(screen.getByRole("button", { name: /Bereken/i }));
 
     const errorMessages = await screen.findAllByText(/Ongeldige invoer/i);
     expect(errorMessages[0]).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe("CashRegister Component", () => {
       target: { value: "15" },
     });
 
-    fireEvent.click(screen.getByText(/Bereken/i));
+    fireEvent.click(screen.getByRole("button", { name: /Bereken/i }));
 
     expect(await screen.findByText(/Wisselgeld:/i)).toBeInTheDocument();
     expect(await screen.findByText(/€5/i)).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe("CashRegister Component", () => {
       target: { value: "15" },
     });
 
-    fireEvent.click(screen.getByText(/Reset/i));
+    fireEvent.click(screen.getByRole("button", { name: /Reset/i }));
 
     expect(screen.getByPlaceholderText(/Voer aankoopbedrag in/i)).toHaveValue(null);
     expect(screen.getByPlaceholderText(/Voer betaald bedrag in/i)).toHaveValue(null);
@@ -79,7 +79,7 @@ describe("CashRegister Component", () => {
       target: { value: "20" },
     });
 
-    fireEvent.click(screen.getByText(/Bereken/i));
+    fireEvent.click(screen.getByRole("button", { name: /Bereken/i }));
 
     expect(await screen.findByText(/Totaal: 10.00/)).toBeInTheDocument();
     expect(await screen.findByText(/€5/)).toBeInTheDocument();
