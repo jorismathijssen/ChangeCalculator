@@ -45,7 +45,7 @@ jobs:
         ./gradlew test
 
   build-and-push:
-    needs: build-and-test  # Ensure tests pass before building images
+    needs: Get-and-test  # FIXED: Correct reference to the first job
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -68,7 +68,7 @@ jobs:
         docker push ghcr.io/${{ github.repository_owner }}/backend:latest
 
   deploy:
-    needs: build-and-push
+    needs: build-and-push  # FIXED: No cycle in dependencies
     runs-on: ubuntu-latest
 
     steps:
