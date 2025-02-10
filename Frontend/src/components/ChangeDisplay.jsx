@@ -4,7 +4,7 @@ export default function ChangeDisplay({ loading, changeData, error, resetChecked
   const [checkedItems, setCheckedItems] = useState({});
 
   useEffect(() => {
-    setCheckedItems({}); // Reset checked state when resetChecked changes
+    setCheckedItems({});
   }, [resetChecked]);
 
   const toggleCheck = (denomination) => {
