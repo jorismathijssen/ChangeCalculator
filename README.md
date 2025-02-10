@@ -4,7 +4,7 @@
 
 [![Build & Deploy to GKE](https://github.com/jorismathijssen/ChangeCalculator/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/jorismathijssen/ChangeCalculator/actions/workflows/docker-image.yml)
 
-De **Change Calculator API** helpt winkelmedewerkers bij het berekenen van het wisselgeld dat zij aan klanten moeten teruggeven.
+De **Change Calculator** helpt bij het berekenen van het wisselgeld dat zij aan klanten moeten teruggeven.
 
 ## Overzicht
 
@@ -15,7 +15,7 @@ Dit project bestaat uit twee hoofdcomponenten:
 
 ## Installatie en Documentatie
 
-Voor installatie-instructies en details over de implementatie, raadpleeg de afzonderlijke documentatie:
+Voor installatie instructies en details over de implementatie:
 
 - [Frontend README](./Frontend/README.md)
 - [Backend README](./Backend/README.md)
@@ -52,13 +52,12 @@ Voor volledige API-documentatie en interactie met de endpoints, bekijk de **Swag
 De applicatie draait momenteel op **Google Kubernetes Engine (GKE)**. De deployment naar deze omgeving wordt beheerd via **GitHub Actions**. De applicatie is [hier](http://130.211.90.197/) te vinden
 
 ## Automatische Tests in GitHub Actions
-Om de betrouwbaarheid van de applicatie te waarborgen, zijn er automatische tests toegevoegd aan de GitHub Actions workflow. Deze tests worden uitgevoerd voordat de Docker-images worden gebouwd en naar Google Kubernetes Engine (GKE) worden gedeployed.
+Er worden automatische tests uitgevoerd in de GitHub Actions workflow. Deze tests worden uitgevoerd voordat de Docker-images worden gebouwd en naar Google Kubernetes Engine (GKE) worden gedeployed.
 
 De workflow voert de volgende tests uit:
 
 Frontend tests (Vitest): Unit tests voor de React-componenten.
 Backend tests (JUnit, Spring Boot): Unit- en integratietests voor de wisselgeldberekening.
-Voor meer details over de implementatie en configuratie van deze tests, zie de [Github Actions Workflow](.github/workflows/docker-image.yml).
 
 ## Features en Uitbreidingen
 
@@ -69,10 +68,6 @@ Voor meer details over de implementatie en configuratie van deze tests, zie de [
 - Ondersteuning voor verschillende munteenheden, zoals EUR, GBP en USD.
 
 ### Extra Functionaliteiten
-- Kubernetes-compatibiliteit: De applicatie kan draaien en [draait](http://130.211.90.197/) binnen een Kubernetes-cluster.
+- Kubernetes-compatibiliteit: De applicatie kan draaien (en [draait](http://130.211.90.197/)) binnen een Kubernetes-cluster.
 - Automatische tests: Unit- en integratietests zijn toegevoegd om de betrouwbaarheid te garanderen.
 - Afvinken van denominaties als leuke gimmick
-
-## Installatie en Gebruik
-
-Voor instructies over het lokaal opstarten van de applicatie en dependencies, raadpleeg de afzonderlijke installatiehandleidingen in de frontend- en backend-mappen.
